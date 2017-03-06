@@ -20,3 +20,9 @@ implementasi konsep V2I dengan pokok permasalahan identifikasi kendaraan yang te
     nyalakan hostpot smartphone dengan nama SSID (L 6125 QZ)
     dekatkan smartphone dengan chip
     lalu cek di webservice dengan mengetikan localhost/webservice lalu klik tab identifikasi
+
+
+## jika ada kesalahan dan ingin mengajukan pertanyaan hubungi
+Contacs Profil: http://bayu-saputra.tk/
+WA/SMS: 087855979114
+e-Mail: bayu.bayusaputra11@gmail.com
