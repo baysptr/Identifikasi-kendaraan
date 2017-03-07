@@ -14,6 +14,11 @@ implementasi konsep V2I dengan pokok permasalahan identifikasi kendaraan yang te
     lalu buat database dengan nama identifikasi
     lalu klik tab import
     lalu arahkan ke file yang berada di dalam folder DB
+    setalah selesai semuanya, mari kita test web service tsb dengan
+    mengetikan localhost/webservice di url browser anda
+    jika anda login berikut username dan passwordnya
+    username: admin
+    password: qazwsxedc
     
   testing chip
     hubungkan chip dengan kabel usb yang terpasang di listrik
