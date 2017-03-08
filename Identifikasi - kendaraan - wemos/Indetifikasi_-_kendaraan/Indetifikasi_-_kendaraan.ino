@@ -1,53 +1,70 @@
-/*
- *  This sketch demonstrates how to scan WiFi networks. 
- *  The API is almost the same as with the WiFi Shield library, 
- *  the most obvious difference being the different file you need to include:
- */
-#include <ESP8266WiFi.h>
-#include <ESP8266HTTPClient.h>
+#include "ESP8266WiFi.h"
 #include <string.h>
 #define MAX_STRING_LEN 20
 
-const char *WIFI_SSID = "Jaringan Tidak Ditemukan";
-const char *WIFI_PASS = "qazwsxedc";
+//inisial wifi serta passwordnya
+const char* ssid     = "Jaringan Tidak Ditemukan";
+const char* password = "";
 
-//variabel webservice untuk menunjukan host url dari web service yang digunakan
-String webService = "http://localhost/identifikasi/resource/identifikasi.php?nopol=";
+//inisial host web service
+const char* host = "10.42.0.1";
 
 void setup() {
   Serial.begin(115200);
 
-  Serial.print("Wait for Connecting to WIFI");
-  WiFi.begin(WIFI_SSID, WIFI_PASS);
-  while(WiFi.status() != WL_CONNECTED){
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println("Wifi is Connected");
-
+  //code instalisasi WifiScan
   WiFi.mode(WIFI_STA);
   WiFi.disconnect();
   delay(100);
+  Serial.println("Wifi Scanner Setup is done");
+  Serial.println();
 
-  Serial.println("Setup done");
-}
-
-//fungsi untuk mengirimkan nopol ke web service
-void kirim_nopol(String nopol){
-  HTTPClient http;
+  //code instalisasi WifiClient
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
   
-  http.begin(webService+nopol);
-
-  int httpcode = http.GET();
-  if(httpcode == HTTP_CODE_OK){
-    Serial.println(httpcode);
-    String response = http.getString();
-    Serial.println(response);
-  }else{
-    Serial.println("Error in HTTP Request !!!");
+  WiFi.begin(ssid, password);
+  
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
   }
 
-  http.end();
+  Serial.println("");
+  Serial.println("WiFi connected");  
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP()); 
+}
+
+//Fungsi ini untuk mengirimkan data nopol ke webservice
+void kirim_nopol(String nopol){
+  WiFiClient client;
+  const int httpPort = 80;
+  if(!client.connect(host, httpPort)){
+    Serial.println("Connection Failed");
+    return;
+  }
+
+  String url = "/identifikasi/resource/identifikasi.php?nopol=";
+  url += nopol;
+  client.print(String("GET ") + url + " HTTP/1.1\r\n" +
+               "Host: " + host + "\r\n" + 
+               "Connection: close\r\n\r\n");
+  unsigned long timeout = millis();
+  while (client.available() == 0) {
+    if (millis() - timeout > 5000) {
+      Serial.println(">>> Client Timeout !");
+      client.stop();
+      return;
+    }
+  }
+  while(client.available()){
+    String line = client.readStringUntil('\r');
+    Serial.print(line);
+  }
+  
+  Serial.println();
+  Serial.println("closing connection");
 }
 
 //fungsi untuk mapping setiap byte char*
@@ -99,7 +116,6 @@ void loop() {
     Serial.println(" networks found");
     for (int i = 0; i < n; ++i)
     {
-      // Print SSID and RSSI for each network found
       Serial.print(i + 1);
       Serial.print(": ");
       Serial.print(WiFi.SSID(i));
@@ -113,6 +129,6 @@ void loop() {
   }
   Serial.println("");
 
-  // Diulang Selama 15 detik
-  delay(15000);
+  //Diulang selama 10 detik
+  delay(10000);
 }
