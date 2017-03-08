@@ -9,23 +9,32 @@ implementasi konsep V2I dengan pokok permasalahan identifikasi kendaraan yang te
     
   install web server:
     kopi folder identifikasi - web - service ke folder xampp->htdocs
-    rename folder tsb dengan nama webservice
+    rename folder tsb dengan nama identifikasi
     ketikan localhost phpmyadmin di url web browser
     lalu buat database dengan nama identifikasi
     lalu klik tab import
     lalu arahkan ke file yang berada di dalam folder DB
     setalah selesai semuanya, mari kita test web service tsb dengan
-    mengetikan localhost/webservice di url browser anda
+    mengetikan localhost/identifikasi di url browser anda
     jika anda login berikut username dan passwordnya
     username: admin
     password: qazwsxedc
     
   testing chip
-    hubungkan chip dengan kabel usb yang terpasang di listrik
-    nyalakan hostpot smartphone dengan nama SSID (L 6125 QZ)
-    dekatkan smartphone dengan chip
-    lalu cek di webservice dengan mengetikan localhost/webservice lalu klik tab identifikasi
+    buka file yang berada dalam folder Identifikasi - kendaraan - wemos dengan Arduino IDE
+    sesuaikan inisial wifi dengan wifi di sekitar anda
+    buka aplikasi cmd atau terminal anda
+    bila membuka cmd ketikan ipconfig
+    bila terminal ketikan ifconfig
+    lalu cari alamat ip yang anda dapat dari komputer anda yang terkoneksi dengan wifi
+    perlu di ingat chip ESP dan komputer anda harus sama-sama menggunakan wifi yang sama
+    setelah ketemu ip anda, lalu ganti ip yang berada di inisial host dengan ip yang anda temukan
+    setelah itu upload
 
+    jika berhasil
+    aktifkan hostpot smartphone anda dengan nama L 6125 QZ
+    jika sudah tunggu 1 menit
+    dan check di web browser dengan url localhost/identifikasi lalu klik tab identifikasi
 
 ## jika ada kesalahan dan ingin mengajukan pertanyaan hubungi
 Contacs Profil: http://bayu-saputra.tk/
