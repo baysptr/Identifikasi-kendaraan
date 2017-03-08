@@ -17,12 +17,12 @@
                         <li role="presentation"><a href="/identifikasi">Home</a></li>
                         <li role="presentation" class="active"><a href="identifikasi.php">Indetifikasi</a></li>
                         <?php if (isset($_SESSION['do_login'])) { ?>
-                        <li role="presentation"><a href="pengguna.php">Pengguna</a></li>
+                            <li role="presentation"><a href="pengguna.php">Pengguna</a></li>
                             <li role="presentation"><a href="javascript:;" onclick="if (confirm('yakin untuk log out ???') == true) {
                                         window.location = 'resource/logout.php'
                                     }">Log out</a></li>
-                        <?php } else {
-                            ?>
+                            <?php } else {
+                                ?>
                             <li role="presentation"><a href="javascript:;" data-toggle="modal" data-target="#login">Login</a></li>
                         <?php } ?>
                     </ul>
@@ -47,8 +47,17 @@
                         <tbody>
                             <?php
                             include './resource/config.php';
-                            $no = 1;
-                            $res = mysqli_query($mysqli, "select h.id, h.id_pengguna, h.last_seen, p.nopol from M_HISTORY as h join M_PENGGUNA as p on h.id_pengguna = p.id");
+
+                            /* Pengaturan Paging */
+                            $per_page = 6; /* Jumlah Data yang ditampilkan Setiap Page */
+                            $page_query = mysqli_query($mysqli, "select * from M_HISTORY");
+                            $pages = ceil(mysqli_num_rows($page_query) / $per_page);
+                            $page = (isset($_GET['page'])) ? (int) $_GET['page'] : 1;
+                            $start = ($page - 1) * $per_page;
+                            /* ------------------ */
+
+                            $res = mysqli_query($mysqli, "select h.id, h.id_pengguna, h.last_seen, p.nopol from M_HISTORY as h join M_PENGGUNA as p on h.id_pengguna = p.id limit $start, $per_page");
+                            $no = 1 + $start;
                             while ($data = mysqli_fetch_array($res)) {
                                 ?>
                                 <tr>
@@ -57,7 +66,20 @@
                                     <td><?= $data['last_seen'] ?></td>
                                     <td><a href="javascript:;" class="btn btn-xs btn-primary" onclick="window.location = 'resource/detail_pengguna.php?xyz@_pg=<?= $data["id_pengguna"] ?>';">Detail Pengguna</a></td>
                                 </tr>
-<?php } ?>
+                            <?php } ?>
+                            <tr>
+                                <td colspan="3" align="center">
+                                    <?php
+                                    /* Link Paging */
+                                    if ($pages >= 1 && $page <= $pages) {
+                                        for ($x = 1; $x <= $pages; $x++) {
+                                            echo ($x == $page) ?
+                                                    '<a href="?page=' . $x . '" class="btn btn-xs btn-primary">' . $x . '</a> ' : '<a  href="?page=' . $x . '" class="btn btn-xs btn-primary">' . $x . '</a> ';
+                                        }
+                                    }
+                                    ?> 
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
